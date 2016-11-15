@@ -36,12 +36,6 @@ class CaesarCipher {
     std::string applyCipher( const std::string& inputText, const CipherMode cipherMode ) const;
 
   private:
-    /// The alphabet - used to determine the cipher character given the plain character and the key
-    const std::vector<char> alphabet_ = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-
-    /// The size of the alphabet
-    const std::vector<char>::size_type alphabetSize_ = alphabet_.size();
-
     /// The cipher key, essentially a constant shift to be applied
     size_t key_ = 0;
 };
