@@ -100,7 +100,7 @@ classical ciphers, it is transliterated using the following rules:
 - Digits are translated to their English equivalent words (e.g. '0' -> "ZERO")
 - All other characters (punctuation) are discarded
 
-At present, the Caesar and Playfair ciphers are supported.
+At present, the Caesar, Playfair and Vigenere ciphers are supported.
 
 # Testing
 
@@ -129,7 +129,9 @@ MPAGS-Code
 │   ├── ProcessCommandLine.cpp
 │   ├── ProcessCommandLine.hpp
 │   ├── TransformChar.cpp
-│   └── TransformChar.hpp
+│   ├── TransformChar.hpp
+│   ├── VigenereCipher.cpp
+│   └── VigenereCipher.hpp
 ├── Testing               Subdirectory for testing the MPAGSCipher library
 │   ├── CMakeLists.txt
 │   ├── catch.hpp
@@ -138,7 +140,8 @@ MPAGS-Code
 │   ├── testHello.cpp
 │   ├── testPlayfairCipher.cpp
 │   ├── testProcessCommandLine.cpp
-│   └── testTransformChar.cpp
+│   ├── testTransformChar.cpp
+│   └── testVigenereCipher.cpp
 ```
 
 # Copying

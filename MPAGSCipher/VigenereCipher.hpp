@@ -7,6 +7,7 @@
 
 // Our project headers
 #include "CipherMode.hpp"
+#include "CaesarCipher.hpp"
 
 /**
  * \file VigenereCipher.hpp
@@ -45,6 +46,9 @@ class VigenereCipher {
   private:
     /// The cipher key
     std::string key_ = "";
+
+    /// Lookup table to go from the character to the corresponding Caesar cipher
+    std::map<char,CaesarCipher> charLookup_;
 
 };
 
