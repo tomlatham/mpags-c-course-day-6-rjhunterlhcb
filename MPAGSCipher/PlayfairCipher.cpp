@@ -87,8 +87,9 @@ std::string PlayfairCipher::applyCipher( const std::string& inputText, const Cip
   outputText = tmpText;
 
   // If the size of the input is odd, add a trailing Z
+  // (or add an X if the last character is already a Z)
   if ( (outputText.size() % 2) == 1 ) {
-    outputText += 'Z';
+    outputText += (outputText[outputText.size()-1] == 'Z') ? 'X' : 'Z';
   }
 
   // Loop over the input digraphs
