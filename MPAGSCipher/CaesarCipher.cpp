@@ -4,6 +4,7 @@
 #include <vector>
 
 // Out project headers
+#include "Alphabet.hpp"
 #include "CaesarCipher.hpp"
 
 CaesarCipher::CaesarCipher( const size_t key )
@@ -22,19 +23,19 @@ std::string CaesarCipher::applyCipher( const std::string& inputText, const Ciphe
 
     // For each character in the input text, find the corresponding position in
     // the alphabet by using an indexed loop over the alphabet container
-    for ( size_t i{0}; i < alphabetSize_; ++i ) {
+    for ( Alphabet::AlphabetSize i{0}; i < Alphabet::size; ++i ) {
 
-      if ( origChar == alphabet_[i] ) {
+      if ( origChar == Alphabet::alphabet[i] ) {
 
 	// Apply the appropriate shift (depending on whether we're encrypting
 	// or decrypting) and determine the new character
 	// Can then break out of the loop over the alphabet
 	switch ( cipherMode ) {
 	  case CipherMode::Encrypt :
-	    processedChar = alphabet_[ (i + key_) % alphabetSize_ ];
+	    processedChar = Alphabet::alphabet[ (i + key_) % Alphabet::size ];
 	    break;
 	  case CipherMode::Decrypt :
-	    processedChar = alphabet_[ (i + alphabetSize_ - key_) % alphabetSize_ ];
+	    processedChar = Alphabet::alphabet[ (i + Alphabet::size - key_) % Alphabet::size ];
 	    break;
 	}
 	break;
