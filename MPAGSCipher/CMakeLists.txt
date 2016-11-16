@@ -3,6 +3,7 @@
 # - Declare the build of the static MPAGSCipher library
 add_library(MPAGSCipher STATIC
   Alphabet.hpp
+  Cipher.hpp
   CipherMode.hpp
   CipherType.hpp
   CaesarCipher.hpp
