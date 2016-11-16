@@ -6,6 +6,7 @@
 #include <vector>
 
 // Our project headers
+#include "Cipher.hpp"
 #include "CipherMode.hpp"
 
 /**
@@ -17,7 +18,7 @@
  * \class CaesarCipher
  * \brief Encrypt or decrypt text using the Caesar cipher with the given key
  */
-class CaesarCipher {
+class CaesarCipher : public Cipher {
   public:
     /**
      * Create a new CaesarCipher with the given key
@@ -33,7 +34,7 @@ class CaesarCipher {
      * \param cipherMode whether to encrypt or decrypt the input text
      * \return the result of applying the cipher to the input text
      */
-    std::string applyCipher( const std::string& inputText, const CipherMode cipherMode ) const;
+    virtual std::string applyCipher( const std::string& inputText, const CipherMode cipherMode ) const override;
 
   private:
     /// The cipher key, essentially a constant shift to be applied
