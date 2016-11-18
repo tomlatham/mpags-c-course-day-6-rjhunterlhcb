@@ -15,6 +15,9 @@ VigenereCipher::VigenereCipher( const std::string& key )
 
 void VigenereCipher::setKey( const std::string& key )
 {
+  // Store the key
+  key_ = key;
+
   // Make sure the key is upper case
   std::transform( std::begin(key_), std::end(key_), std::begin(key_), ::toupper );
 
@@ -22,20 +25,17 @@ void VigenereCipher::setKey( const std::string& key )
   key_.erase( std::remove_if( std::begin(key_), std::end(key_), [](char c){ return !std::isalpha(c); } ),
 		  std::end(key_) );
 
-  // Store the key
-  key_ = key;
-
   // Loop through the key
   for ( const char letter : key_ ) {
+
+    // Check if we've already seen this letter before
+    if ( charLookup_.find( letter ) != charLookup_.end() ){
+      continue;
+    }
 
     // Find the position of the letter in the alphabet
     for ( Alphabet::AlphabetSize i {0}; i < Alphabet::size; ++i ) {
 
-      // check if we've already seen this letter before
-      if ( charLookup_.find( letter ) != charLookup_.end() ){
-	continue;
-      }
-      
       if ( letter == Alphabet::alphabet[i] ) {
 
 	// Construct a Caesar cipher object using the position as the key
