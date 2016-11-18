@@ -29,24 +29,18 @@ void VigenereCipher::setKey( const std::string& key )
   for ( const char letter : key_ ) {
 
     // Check if we've already seen this letter before
-    if ( charLookup_.find( letter ) != charLookup_.end() ){
+    if ( charLookup_.find( letter ) != charLookup_.end() ) {
       continue;
     }
 
     // Find the position of the letter in the alphabet
-    for ( Alphabet::AlphabetSize i {0}; i < Alphabet::size; ++i ) {
+    std::string::size_type index = Alphabet::alphabet.find( letter );
 
-      if ( letter == Alphabet::alphabet[i] ) {
+    // Construct a Caesar cipher object using the position as the key
+    CaesarCipher cc {index};
 
-	// Construct a Caesar cipher object using the position as the key
-	CaesarCipher cc {i};
-
-	// Store the Caesar cipher object so that it can be retrieved based on the character in the key
-	charLookup_.insert( std::make_pair( letter, cc ) );
-
-	break;
-      }
-    }
+    // Store the Caesar cipher object so that it can be retrieved based on the character in the key
+    charLookup_.insert( std::make_pair( letter, cc ) );
   }
 
 }
