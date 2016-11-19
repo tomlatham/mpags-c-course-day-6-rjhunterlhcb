@@ -6,22 +6,26 @@
 #include <string>
 
 #include "Cipher.hpp"
+#include "CipherFactory.hpp"
 #include "CipherMode.hpp"
 #include "CipherType.hpp"
-#include "CaesarCipher.hpp"
-#include "PlayfairCipher.hpp"
-#include "VigenereCipher.hpp"
+
+std::map<CipherType,std::string> keys = {
+  std::pair<CipherType,std::string>(CipherType::Caesar,"10"),
+  std::pair<CipherType,std::string>(CipherType::Playfair,"hello"),
+  std::pair<CipherType,std::string>(CipherType::Vigenere,"hello")
+};
 
 std::map<CipherType,std::string> plainText = {
-	std::pair<CipherType,std::string>(CipherType::Caesar,"HELLOWORLD"),
-	std::pair<CipherType,std::string>(CipherType::Playfair,"BOBISXSOMESORTOFIUNIORCOMPLEXQXENOPHONEONEZEROTHINGZ"),
-	std::pair<CipherType,std::string>(CipherType::Vigenere,"THISISQUITEALONGMESSAGESOTHEKEYWILLNEEDTOREPEATAFEWTIMES")
+  std::pair<CipherType,std::string>(CipherType::Caesar,"HELLOWORLD"),
+  std::pair<CipherType,std::string>(CipherType::Playfair,"BOBISXSOMESORTOFIUNIORCOMPLEXQXENOPHONEONEZEROTHINGZ"),
+  std::pair<CipherType,std::string>(CipherType::Vigenere,"THISISQUITEALONGMESSAGESOTHEKEYWILLNEEDTOREPEATAFEWTIMES")
 };
 
 std::map<CipherType,std::string> cipherText = {
-	std::pair<CipherType,std::string>(CipherType::Caesar,"ROVVYGYBVN"),
-	std::pair<CipherType,std::string>(CipherType::Playfair,"FHIQXLTLKLTLSUFNPQPKETFENIOLVSWLTFIAFTLAKOWATEQOKPPA"),
-	std::pair<CipherType,std::string>(CipherType::Vigenere,"ALTDWZUFTHLEWZBNQPDGHKPDCALPVSFATWZUIPOHVVPASHXLQSDXTXSZ")
+  std::pair<CipherType,std::string>(CipherType::Caesar,"ROVVYGYBVN"),
+  std::pair<CipherType,std::string>(CipherType::Playfair,"FHIQXLTLKLTLSUFNPQPKETFENIOLVSWLTFIAFTLAKOWATEQOKPPA"),
+  std::pair<CipherType,std::string>(CipherType::Vigenere,"ALTDWZUFTHLEWZBNQPDGHKPDCALPVSFATWZUIPOHVVPASHXLQSDXTXSZ")
 };
 
 bool testCipher( const Cipher& cipher, const CipherMode mode, const std::string& inputText, const std::string& outputText )
@@ -30,21 +34,19 @@ bool testCipher( const Cipher& cipher, const CipherMode mode, const std::string&
 }
 
 TEST_CASE("Cipher encryption", "[ciphers]") {
-  CaesarCipher cc{10};
-  PlayfairCipher pc{"hello"};
-  VigenereCipher vc{"hello"};
-
-  REQUIRE( testCipher(cc, CipherMode::Encrypt, plainText[CipherType::Caesar],   cipherText[CipherType::Caesar])   );
-  REQUIRE( testCipher(pc, CipherMode::Encrypt, plainText[CipherType::Playfair], cipherText[CipherType::Playfair]) );
-  REQUIRE( testCipher(vc, CipherMode::Encrypt, plainText[CipherType::Vigenere], cipherText[CipherType::Vigenere]) );
+  for ( auto& elem : keys ) {
+    auto cipher = cipherFactory( elem.first, elem.second );
+    if ( cipher ) {
+      REQUIRE( testCipher( *cipher, CipherMode::Encrypt, plainText[elem.first], cipherText[elem.first]) );
+    }
+  }
 }
 
 TEST_CASE("Cipher decryption", "[ciphers]") {
-  CaesarCipher cc{10};
-  PlayfairCipher pc{"hello"};
-  VigenereCipher vc{"hello"};
-
-  REQUIRE( testCipher(cc, CipherMode::Decrypt, cipherText[CipherType::Caesar],   plainText[CipherType::Caesar])   );
-  REQUIRE( testCipher(pc, CipherMode::Decrypt, cipherText[CipherType::Playfair], plainText[CipherType::Playfair]) );
-  REQUIRE( testCipher(vc, CipherMode::Decrypt, cipherText[CipherType::Vigenere], plainText[CipherType::Vigenere]) );
+  for ( auto& elem : keys ) {
+    auto cipher = cipherFactory( elem.first, elem.second );
+    if ( cipher ) {
+      REQUIRE( testCipher( *cipher, CipherMode::Decrypt, cipherText[elem.first], plainText[elem.first]) );
+    }
+  }
 }
