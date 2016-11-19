@@ -120,8 +120,13 @@ MPAGS-Code
 │   ├── CMakeLists.txt
 │   └── Doxyfile.in
 ├── MPAGSCipher           Subdirectory for MPAGSCipher library code
+│   ├── CMakeLists.txt
+│   ├── Alphabet.hpp
 │   ├── CaesarCipher.cpp
 │   ├── CaesarCipher.hpp
+│   ├── Cipher.hpp
+│   ├── CipherFactory.cpp
+│   ├── CipherFactory.hpp
 │   ├── CipherMode.hpp
 │   ├── CipherType.hpp
 │   ├── PlayfairCipher.cpp
@@ -137,6 +142,7 @@ MPAGS-Code
 │   ├── catch.hpp
 │   ├── testCaesarCipher.cpp
 │   ├── testCatch.cpp
+│   ├── testCiphers.cpp
 │   ├── testHello.cpp
 │   ├── testPlayfairCipher.cpp
 │   ├── testProcessCommandLine.cpp
