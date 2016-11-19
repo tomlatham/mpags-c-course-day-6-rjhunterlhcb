@@ -75,7 +75,7 @@ Available options:
 
   -c|--cipher CIPHER
                       Specify the cipher to be used to perform the encryption/decryption
-                      CIPHER can either be caesar or playfair - caesar is the default
+                      CIPHER can be caesar, playfair or vigenere - caesar is the default
 
   -k|--key KEY
                       Specify the cipher KEY

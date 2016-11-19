@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
       << "                      Stdout will be used if not supplied\n\n"
       << "  -c|--cipher CIPHER\n"
       << "                      Specify the cipher to be used to perform the encryption/decryption\n"
-      << "                      CIPHER can either be caesar or playfair - caesar is the default\n\n"
+      << "                      CIPHER can be caesar, playfair or vigenere - caesar is the default\n\n"
       << "  -k|--key KEY\n"
       << "                      Specify the cipher KEY\n"
       << "                      A null key, i.e. no encryption, is used if not supplied\n\n"
