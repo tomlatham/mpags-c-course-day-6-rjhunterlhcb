@@ -48,4 +48,17 @@ class Cipher {
     virtual ~Cipher() = default;
 };
 
+/**
+ * \brief Custom exception, thrown when invalid key is given to Vigenere Cipher 
+ * 
+ */
+
+class InvalidKey : public std::invalid_argument{
+    public:
+        InvalidKey( const std::string& msg ):
+            std::invalid_argument( msg )
+    {
+    }
+}; 
+
 #endif

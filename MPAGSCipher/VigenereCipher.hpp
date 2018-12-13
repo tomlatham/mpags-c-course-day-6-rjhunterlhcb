@@ -53,4 +53,12 @@ class VigenereCipher : public Cipher {
 
 };
 
+/*class InvalidKey : public std::invalid_argument{
+    public:
+        InvalidKey( const std::string& msg ):
+            std::invalid_argument( msg )
+    {
+    }
+};*/ 
+
 #endif

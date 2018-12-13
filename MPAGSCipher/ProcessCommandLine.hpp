@@ -33,8 +33,27 @@ struct ProgramSettings {
  *
  * \param args the command-line arguments to be processed
  * \param settings the program settings to be modified based upon the arguments received
- * \return true if the arguments could be successfully parsed, false otherwise
  */
-bool processCommandLine(const std::vector<std::string>& args, ProgramSettings& settings);
+void processCommandLine(const std::vector<std::string>& args, ProgramSettings& settings);
+
+/**
+ * \brief Throws a custom exception for a missing command line flag upon launching program
+ * 
+ */
+class MissingArgument : public std::invalid_argument{
+   public:
+    MissingArgument( const std::string& msg ):
+        std::invalid_argument( msg ) 
+    { // What are these brackets doing?    
+    }
+};
+
+class UnknownArgument : public std::invalid_argument{
+    public: 
+        UnknownArgument( const std::string& msg ):
+            std::invalid_argument( msg )    
+        {
+        }
+};
 
 #endif // MPAGSCIPHER_PROCESSCOMMANDLINE_HPP 

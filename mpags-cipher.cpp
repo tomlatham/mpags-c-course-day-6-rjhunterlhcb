@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <future> 
+#include <thread> 
 
 // Our project headers
 #include "CipherFactory.hpp"
@@ -21,14 +23,17 @@ int main(int argc, char* argv[])
   ProgramSettings settings { false, false, "", "", "", CipherMode::Encrypt, CipherType::Caesar };
 
   // Process command line arguments
-  bool cmdLineStatus { processCommandLine(cmdLineArgs, settings) };
-
-  // Any failure in the argument processing means we can't continue
-  // Use a non-zero return value to indicate failure
-  if( !cmdLineStatus ) {
+  //bool cmdLineStatus { processCommandLine(cmdLineArgs, settings) };
+  try{
+    processCommandLine( cmdLineArgs, settings);
+  } catch ( const MissingArgument& e ){
+    std::cerr << "[error] Missing argument: " << e.what() << std::endl;
+    return 1;
+  } catch ( const UnknownArgument& e ) {
+    std::cerr << "[error] Unknown argument: " << e.what() << std::endl;
     return 1;
   }
-
+  
   // Handle help, if requested
   if (settings.helpRequested) {
     // Line splitting for readability
@@ -100,16 +105,70 @@ int main(int argc, char* argv[])
   }
 
   // Request construction of the appropriate cipher
-  auto cipher = cipherFactory( settings.cipherType, settings.cipherKey );
-
-  // Check that the cipher was constructed successfully
+  std::unique_ptr<Cipher> cipher {};
+  try {
+    cipher = cipherFactory( settings.cipherType, settings.cipherKey );
+  } catch (InvalidKey& e) {
+    // We want to tell the user that a default key is being used, but still create the cipher. 
+    std::cout << "[error] invalid key: " << e.what() << std::endl; 
+    settings.cipherKey = "VIGENEREEXAMPLE";
+    cipher = cipherFactory( settings.cipherType, settings.cipherKey );
+  }
   if ( ! cipher ) {
     std::cerr << "[error] problem constructing requested cipher" << std::endl;
     return 1;
   }
 
-  // Run the cipher on the input text, specifying whether to encrypt/decrypt
-  std::string outputText { cipher->applyCipher( inputText, settings.cipherMode ) };
+  // Declare the output string: treated differently for CaesarCipher
+  std::string outputText;
+
+  if (settings.cipherType == CipherType::Caesar) {
+   
+    // If running the Caesar Cipher, we want to multothread it in on the input string 
+    auto thread_function = [&settings, &cipher] ( std::string input ) {
+         std::string outSubText { cipher->applyCipher( input, settings.cipherMode  )  }; 
+         return outSubText;
+    }; 
+
+    std::vector<std::string> inputSubText {}; 
+    size_t size { inputText.size() };
+    size_t no_threads { 4 };
+    size_t spacing { size / no_threads + 1 }; //Add the 1 on to make sure we don't under-count 
+    
+    // Create a vector of threads 
+    std::vector< std::future< std::string  >  > futures;
+
+    for ( size_t i=0; i<no_threads; ++i) {
+        std::string subText { inputText.substr(i*spacing, spacing) };
+        inputSubText.push_back(subText);
+        //std::cout << subText << std::endl;
+
+        // Create a thread 
+        futures.push_back( std::async(thread_function, subText) );
+    }
+
+    std::future_status status;
+    //std::vector<std::string> outputSubText {};
+    //outputSubText.resize{no_threads};
+    for ( size_t i=0; i< no_threads; ++i) {
+        do {
+            status = futures[i].wait_for( std::chrono::seconds(1) );
+            if ( status == std::future_status::ready) {
+                std::cout << "[main] Thread " << i << " has finished.\n";
+                outputText += futures[i].get();
+            } else if ( status == std::future_status::timeout ) {
+                std::cout << "[main] Thread " << i << " still working on it.\n";
+            }
+        } while (status != std::future_status::ready);
+     } 
+    
+
+  }  
+  else {
+    // Run the other ciphers on the input text, specifying whether to encrypt/decrypt
+        outputText =  cipher->applyCipher( inputText, settings.cipherMode );
+  
+  }
 
   // Output the transliterated text
   if (!settings.outputFile.empty()) {
