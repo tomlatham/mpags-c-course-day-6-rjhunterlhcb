@@ -48,6 +48,10 @@ class MissingArgument : public std::invalid_argument{
     }
 };
 
+/**
+ * \brief Throws a custom exception for an unknown command line flag upon launching program
+ *
+ */
 class UnknownArgument : public std::invalid_argument{
     public: 
         UnknownArgument( const std::string& msg ):

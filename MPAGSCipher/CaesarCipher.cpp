@@ -31,14 +31,7 @@ CaesarCipher::CaesarCipher( const std::string& key )
     // handle that instead but we only cover exceptions very briefly on the
     // final day of this course - they are a very complex area of C++ that
     // could take an entire course on their own!)
-    /*for ( const auto& elem : key ) {
-      if ( ! std::isdigit(elem) ) {
-        std::cerr << "[error] cipher key must be an unsigned long integer for Caesar cipher,\n"
-                  << "        the supplied key (" << key << ") could not be successfully converted" << std::endl;
-        return;
-      }
-    }*/
-    try {
+  try {
         key_ = std::stoul(key) % Alphabet::size;
     } catch (std::invalid_argument& e) {
         std::cout << "[exception] invalid_argument converting key to unsigned long\n";

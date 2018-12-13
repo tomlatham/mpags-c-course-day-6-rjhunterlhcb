@@ -148,8 +148,6 @@ int main(int argc, char* argv[])
     }
 
     std::future_status status;
-    //std::vector<std::string> outputSubText {};
-    //outputSubText.resize{no_threads};
     for ( size_t i=0; i< no_threads; ++i) {
         do {
             status = futures[i].wait_for( std::chrono::seconds(1) );
@@ -162,7 +160,6 @@ int main(int argc, char* argv[])
         } while (status != std::future_status::ready);
      } 
     
-
   }  
   else {
     // Run the other ciphers on the input text, specifying whether to encrypt/decrypt
