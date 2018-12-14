@@ -31,7 +31,6 @@ void processCommandLine(const std::vector<std::string>& args,
       // Next element is filename unless -i is the last argument
       if (i == nArgs-1) {
         throw MissingArgument("-i/--infile requires a filename argument"); 
-        break;
       }
       else {
         // Got filename, so assign value and advance past it
@@ -44,7 +43,6 @@ void processCommandLine(const std::vector<std::string>& args,
       // Next element is filename unless -o is the last argument
       if (i == nArgs-1) {
         throw MissingArgument("-o/--outfile requires a filename argument");
-        break;
       }
       else {
         // Got filename, so assign value and advance past it
@@ -57,7 +55,6 @@ void processCommandLine(const std::vector<std::string>& args,
       // Next element is the key unless -k is the last argument
       if (i == nArgs-1) {
         throw MissingArgument("-k/--key requires a string argument");
-        break;
       }
       else {
         // Got the key, so assign the value and advance past it
@@ -78,7 +75,6 @@ void processCommandLine(const std::vector<std::string>& args,
       // Next element is the name of the cipher, unless -c is the last argument
       if (i == nArgs-1) {
         throw MissingArgument("-c requires a string argument");
-        break;
       }
       else {
         // Got the key, so assign the value and advance past it
@@ -89,10 +85,9 @@ void processCommandLine(const std::vector<std::string>& args,
 	} else if ( args[i+1] == "vigenere" ) {
 	    settings.cipherType = CipherType::Vigenere;
 	} else {
-        std::string UnkCiphErr {"unknown cipher: "};
-        UnkCiphErr += args[i+1];
+            std::string UnkCiphErr {"unknown cipher: "};
+            UnkCiphErr += args[i+1];
 	    throw UnknownArgument(UnkCiphErr); 
-	    break;
 	}
         ++i;
       }
@@ -103,7 +98,6 @@ void processCommandLine(const std::vector<std::string>& args,
         std::string UnkArgErr {"unknown argument: "};
         UnkArgErr += args[i+1];    
         throw UnknownArgument(UnkArgErr);
-        break;
     }
   }
 }

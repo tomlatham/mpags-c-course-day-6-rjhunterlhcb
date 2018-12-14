@@ -49,16 +49,20 @@ class Cipher {
 };
 
 /**
- * \brief Custom exception, thrown when invalid key is given to Vigenere Cipher 
+ * \brief Custom exception, thrown when an invalid key is given to any Cipher class
  * 
  */
 
 class InvalidKey : public std::invalid_argument{
     public:
+      /**
+       * \brief Construct an InvalidKey exception
+       * \param msg the diagnostic message
+       */
         InvalidKey( const std::string& msg ):
             std::invalid_argument( msg )
-    {
-    }
+	{
+	}
 }; 
 
 #endif

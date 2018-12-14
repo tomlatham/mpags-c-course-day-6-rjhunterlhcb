@@ -108,11 +108,10 @@ int main(int argc, char* argv[])
   std::unique_ptr<Cipher> cipher {};
   try {
     cipher = cipherFactory( settings.cipherType, settings.cipherKey );
-  } catch (InvalidKey& e) {
+  } catch ( const InvalidKey& e) {
     // We want to tell the user that a default key is being used, but still create the cipher. 
-    std::cout << "[error] invalid key: " << e.what() << std::endl; 
-    settings.cipherKey = "VIGENEREEXAMPLE";
-    cipher = cipherFactory( settings.cipherType, settings.cipherKey );
+    std::cerr << "[error] invalid key: " << e.what() << std::endl; 
+    return 1;
   }
   if ( ! cipher ) {
     std::cerr << "[error] problem constructing requested cipher" << std::endl;
@@ -125,26 +124,25 @@ int main(int argc, char* argv[])
   if (settings.cipherType == CipherType::Caesar) {
    
     // If running the Caesar Cipher, we want to multothread it in on the input string 
-    auto thread_function = [&settings, &cipher] ( std::string input ) {
-         std::string outSubText { cipher->applyCipher( input, settings.cipherMode  )  }; 
-         return outSubText;
+    auto thread_function = [&settings, &cipher] ( const std::string& input ) {
+         return cipher->applyCipher( input, settings.cipherMode  );
     }; 
 
-    std::vector<std::string> inputSubText {}; 
-    size_t size { inputText.size() };
-    size_t no_threads { 4 };
-    size_t spacing { size / no_threads + 1 }; //Add the 1 on to make sure we don't under-count 
+    const size_t size { inputText.size() };
+    const size_t no_threads { 4 };
+    const size_t spacing { size / no_threads + 1 }; //Add the 1 on to make sure we don't under-count 
     
+    std::vector<std::string> inputSubText {}; 
+    inputSubText.reserve(no_threads);
+
     // Create a vector of threads 
     std::vector< std::future< std::string  >  > futures;
 
     for ( size_t i=0; i<no_threads; ++i) {
-        std::string subText { inputText.substr(i*spacing, spacing) };
-        inputSubText.push_back(subText);
-        //std::cout << subText << std::endl;
+        inputSubText.emplace_back( inputText.substr(i*spacing, spacing) );
 
         // Create a thread 
-        futures.push_back( std::async(thread_function, subText) );
+        futures.push_back( std::async(thread_function, inputSubText[i]) );
     }
 
     std::future_status status;
@@ -163,8 +161,7 @@ int main(int argc, char* argv[])
   }  
   else {
     // Run the other ciphers on the input text, specifying whether to encrypt/decrypt
-        outputText =  cipher->applyCipher( inputText, settings.cipherMode );
-  
+    outputText = cipher->applyCipher( inputText, settings.cipherMode );
   }
 
   // Output the transliterated text

@@ -29,9 +29,7 @@ void VigenereCipher::setKey( const std::string& key )
   // Check that the key is not now empty
   if ( key_.empty() ) {
     // Throw an exception! 
-    std::string InvKeyErr {"key provided to VigenereCipher is empty, setting it to the default: "};
-    key_ = "VIGENEREEXAMPLE";
-    InvKeyErr += key_;
+    std::string InvKeyErr {"key provided to VigenereCipher is empty or consists purely of non-alphabetic characters"};
     throw InvalidKey(InvKeyErr);
   }
 

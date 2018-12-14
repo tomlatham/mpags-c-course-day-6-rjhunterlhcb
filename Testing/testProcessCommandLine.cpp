@@ -46,7 +46,7 @@ TEST_CASE("Key entered with no key specified"){
   ProgramSettings prog_set{false, false, "", "", "", CipherMode::Encrypt, CipherType::Caesar};
   std::vector<std::string> cmd_line = {"mpags-cipher", "-k"};
 
-  REQUIRE_THROWS( processCommandLine(cmd_line, prog_set) );
+  REQUIRE_THROWS_AS(processCommandLine(cmd_line, prog_set), MissingArgument);
 }
 
 TEST_CASE("Key entered with key specified"){
@@ -63,7 +63,7 @@ TEST_CASE("Input file declared without using input file"){
   ProgramSettings prog_set{false, false, "", "", "", CipherMode::Encrypt, CipherType::Caesar};
   std::vector<std::string> cmd_line = {"mpags-cipher", "-i"};
 
-  REQUIRE_THROWS( processCommandLine(cmd_line, prog_set) );
+  REQUIRE_THROWS_AS(processCommandLine(cmd_line, prog_set), MissingArgument);
 }
 
 TEST_CASE("Input file declared"){
@@ -80,7 +80,7 @@ TEST_CASE("Output file declared without specifying output file"){
   ProgramSettings prog_set{false, false, "", "", "", CipherMode::Encrypt, CipherType::Caesar};
   std::vector<std::string> cmd_line = {"mpags-cipher", "-o"};
   
-  REQUIRE_THROWS( processCommandLine(cmd_line, prog_set) );
+  REQUIRE_THROWS_AS(processCommandLine(cmd_line, prog_set), MissingArgument);
 }
 
 TEST_CASE("Output file declared"){
@@ -96,14 +96,14 @@ TEST_CASE("Cipher type declared without specifying cipher"){
   
   ProgramSettings prog_set{false, false, "", "", "", CipherMode::Encrypt, CipherType::Caesar};
   std::vector<std::string> cmd_line = {"mpags-cipher", "-c"};
-  REQUIRE_THROWS( processCommandLine(cmd_line, prog_set) );
+  REQUIRE_THROWS_AS(processCommandLine(cmd_line, prog_set), MissingArgument);
 }
 
 TEST_CASE("Cipher type declared with unknown cipher"){
   
   ProgramSettings prog_set{false, false, "", "", "", CipherMode::Encrypt, CipherType::Caesar};
   std::vector<std::string> cmd_line = {"mpags-cipher", "-c", "rubbish"};
-  REQUIRE_THROWS( processCommandLine(cmd_line, prog_set) );
+  REQUIRE_THROWS_AS( processCommandLine(cmd_line, prog_set), UnknownArgument);
 }
 
 TEST_CASE("Cipher type declared with Caesar cipher"){
@@ -121,6 +121,14 @@ TEST_CASE("Cipher type declared with Playfair cipher"){
   std::vector<std::string> cmd_line = {"mpags-cipher", "-c", "playfair"};
 
   REQUIRE_NOTHROW( processCommandLine(cmd_line, prog_set) ); 
- 
   REQUIRE( prog_set.cipherType == CipherType::Playfair);
+}
+
+TEST_CASE("Cipher type declared with Vigenere cipher"){
+  
+  ProgramSettings prog_set{false, false, "", "", "", CipherMode::Encrypt, CipherType::Caesar};
+  std::vector<std::string> cmd_line = {"mpags-cipher", "-c", "vigenere"};
+
+  REQUIRE_NOTHROW( processCommandLine(cmd_line, prog_set) ); 
+  REQUIRE( prog_set.cipherType == CipherType::Vigenere);
 }

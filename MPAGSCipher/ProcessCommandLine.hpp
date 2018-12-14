@@ -33,15 +33,22 @@ struct ProgramSettings {
  *
  * \param args the command-line arguments to be processed
  * \param settings the program settings to be modified based upon the arguments received
+ *
+ * \exception MissingArgument will be emitted if an expected argument is not found during parsing
+ * \exception UnknownArgument will be emitted if an argument encountered during parsing is not recognised
  */
 void processCommandLine(const std::vector<std::string>& args, ProgramSettings& settings);
 
 /**
- * \brief Throws a custom exception for a missing command line flag upon launching program
+ * \brief A custom exception indicating a missing command line flag upon launching program
  * 
  */
 class MissingArgument : public std::invalid_argument{
    public:
+    /**
+     * \brief Construct a MissingArgument exception
+     * \param msg the diagnostic message
+     */
     MissingArgument( const std::string& msg ):
         std::invalid_argument( msg ) 
     { // What are these brackets doing?    
@@ -49,11 +56,15 @@ class MissingArgument : public std::invalid_argument{
 };
 
 /**
- * \brief Throws a custom exception for an unknown command line flag upon launching program
+ * \brief A custom exception indicating an unknown command line flag upon launching program
  *
  */
 class UnknownArgument : public std::invalid_argument{
     public: 
+    /**
+     * \brief Construct a UnknownArgument exception
+     * \param msg the diagnostic message
+     */
         UnknownArgument( const std::string& msg ):
             std::invalid_argument( msg )    
         {
